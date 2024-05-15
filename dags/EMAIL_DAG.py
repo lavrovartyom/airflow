@@ -34,12 +34,12 @@ with DAG(
     @task(
         on_failure_callback=task_failure_alert, on_success_callback=task_success_alert
     )
-    def task_2():
+    def task_2() -> None:
         logging.info("Начало работы задачи - 2!")
         a = 5 / 0
 
     @task(trigger_rule=TriggerRule.ALL_DONE)
-    def final_task(ti):
+    def final_task(ti) -> None:
         xcoms = XCom.get_many(run_id=ti.get_dagrun().run_id)
         sorted_xcoms = sorted(xcoms, key=lambda x: x.timestamp)
 
