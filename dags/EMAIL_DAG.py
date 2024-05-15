@@ -29,7 +29,7 @@ with DAG(
         on_failure_callback=task_failure_alert, on_success_callback=task_success_alert
     )
     def task_1() -> None:
-        logging.info("Начало работы задачи - 2!")
+        logging.info("Начало работы задачи - 1!")
 
     @task(
         on_failure_callback=task_failure_alert, on_success_callback=task_success_alert
