@@ -40,7 +40,10 @@ with DAG(
 
     @task(trigger_rule=TriggerRule.ALL_DONE)
     def final_task(ti) -> None:
-        xcoms = XCom.get_many(run_id=ti.get_dagrun().run_id)
+        xcoms = XCom.get_many(
+            run_id=ti.get_dagrun().run_id,
+            key="email_notification",
+        )
         sorted_xcoms = sorted(xcoms, key=lambda x: x.timestamp)
 
         logging.info(f"Найдено {xcoms.count()} записей в XCom.")
