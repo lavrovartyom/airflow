@@ -21,19 +21,13 @@ def push_xcom(ti, key, value):
     ti.xcom_push(key=key, value=value)
 
 
-with DAG(
-    dag_id=Path(__file__).name,
-) as dag:
+with DAG(dag_id=Path(__file__).name) as dag:
 
-    @task(
-        on_failure_callback=task_failure_alert, on_success_callback=task_success_alert
-    )
+    @task(on_failure_callback=task_failure_alert, on_success_callback=task_success_alert)
     def task_1() -> None:
         logging.info("Начало работы задачи - 1!")
 
-    @task(
-        on_failure_callback=task_failure_alert, on_success_callback=task_success_alert
-    )
+    @task(on_failure_callback=task_failure_alert, on_success_callback=task_success_alert)
     def task_2() -> None:
         logging.info("Начало работы задачи - 2!")
         a = 5 / 0
