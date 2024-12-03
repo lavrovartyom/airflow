@@ -1,30 +1,23 @@
 from airflow.decorators import task_group, task
-import logging
-import random
 from utils.parser import XMLParser
 from airflow.models.xcom_arg import XComArg
+from utils.taske_random import create_random_dicts
 
 
-@task
-def create_random_dicts() -> list:
-    """
-    Создает список словарей с рандомными данными.
-    """
-    return [
-        {"id": i, "name": f"RandomName_{i}", "value": random.uniform(0, 100)}
-        for i in range(3)
-    ]
+XSLT_FILES = ["contract_44fz.xsl", "contract_procedure.xsl", "contract_finansess.xsl", "contract_suplier.xsl"]
 
 
 @task_group
-def process_data():
+def process_data(source_folder: str):
     """
     Группа задач с использованием mapped tasks.
     """
-    # Получаем список словарей
-    random_dicts = create_random_dicts()
+    metadata = create_random_dicts()
 
-    # Динамическое маппирование задачи XMLParser
-    XMLParser.partial(task_id="test_xml_parser_task").expand(
-        my_metadata=random_dicts  # Маппим каждый словарь
+    XMLParser.partial(
+        task_id="xml_parse",
+        source_folder=source_folder,
+        metadata=metadata
+    ).expand(
+        xsl_file=XSLT_FILES
     )
